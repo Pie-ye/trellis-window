@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trellis Window</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Trellis Window</h1>
+        <span class="sub">選擇資料夾 · 進度 · 結案 Review</span>
+      </header>
+
+      <aside id="projects-panel">
+        <div class="panel-head">
+          <h2>工作區 / 專案</h2>
+          <div class="row">
+            <button id="btn-pick-folder" type="button" class="primary">選擇資料夾…</button>
+            <button id="btn-rescan" type="button" class="ghost" title="重新掃描目前工作區">重新掃描</button>
+          </div>
+          <div class="row row-tight">
+            <button
+              id="btn-clear-list"
+              type="button"
+              class="ghost danger"
+              title="僅清空介面清單，不刪磁碟上任何檔案"
+            >
+              清空清單
+            </button>
+            <button
+              id="btn-unhide"
+              type="button"
+              class="ghost"
+              title="清除「已隱藏」記錄，下次掃描可再出現"
+            >
+              還原已隱藏
+            </button>
+          </div>
+          <div id="workspace-info" class="workspace-info" hidden></div>
+          <div id="project-error" class="error-banner" hidden></div>
+        </div>
+        <ul id="project-list" class="list"></ul>
+      </aside>
+
+      <div class="col" id="tasks-panel">
+        <div class="panel-head">
+          <h2>Tasks · 進度</h2>
+          <div id="progress-panel" class="progress-panel" hidden></div>
+        </div>
+        <div id="tasks-empty" class="empty">先選擇資料夾並掃描 Trellis 專案</div>
+        <ul id="task-list" class="list" hidden></ul>
+      </div>
+
+      <main class="col-main">
+        <div id="detail-empty" class="empty">選擇 task 查看 PRD / Design / Implement 與 Specs</div>
+        <div id="detail" hidden>
+          <div class="tabs" id="tabs">
+            <button type="button" data-tab="overview" class="active">Overview</button>
+            <button type="button" data-tab="review">Review</button>
+            <button type="button" data-tab="prd">PRD</button>
+            <button type="button" data-tab="design">Design</button>
+            <button type="button" data-tab="implement">Implement</button>
+            <button type="button" data-tab="specs">Specs</button>
+          </div>
+          <div class="content" id="tab-content"></div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Folder picker modal -->
+    <div id="picker-modal" class="modal" hidden>
+      <div class="modal-backdrop" data-close="1"></div>
+      <div class="modal-card" role="dialog" aria-labelledby="picker-title">
+        <div class="modal-head">
+          <h3 id="picker-title">選擇要掃描的資料夾</h3>
+          <button type="button" class="ghost" id="btn-close-picker" aria-label="關閉">✕</button>
+        </div>
+        <p class="modal-hint">
+          會掃描此資料夾底下所有含 <code>.trellis/</code> 的專案（含子目錄）。
+        </p>
+        <div class="picker-path-row">
+          <button type="button" class="ghost" id="btn-picker-up" title="上一層">↑</button>
+          <input id="picker-path" type="text" spellcheck="false" />
+          <button type="button" class="ghost" id="btn-picker-go">前往</button>
+        </div>
+        <div id="picker-error" class="error-banner" hidden></div>
+        <ul id="picker-entries" class="picker-list"></ul>
+        <div class="modal-actions">
+          <span id="picker-trellis-hint" class="muted"></span>
+          <div class="row">
+            <button type="button" class="ghost" id="btn-picker-cancel">取消</button>
+            <button type="button" class="primary" id="btn-picker-select">掃描此資料夾</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
