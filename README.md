@@ -23,6 +23,15 @@ cd trellis-window
 # 本機：  http://127.0.0.1:8775
 ```
 
+`start.ps1` 會在 **缺少 uvicorn 時自動 `pip install -r requirements.txt`**（即使 `.venv` 已存在）。
+
+若仍報 `No module named uvicorn`，刪除壞掉的 venv 後重跑：
+
+```powershell
+Remove-Item -Recurse -Force .venv
+.\start.ps1
+```
+
 若出現「無法載入，因為這個系統上已停用指令碼執行」，先執行一次：
 
 ```powershell
@@ -33,9 +42,8 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python -m uvicorn server.app:app --host 0.0.0.0 --port 8775
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m uvicorn server.app:app --host 0.0.0.0 --port 8775
 ```
 
 1. 點 **選擇資料夾…** 在伺服器檔案系統中瀏覽  
