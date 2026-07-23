@@ -4,11 +4,38 @@
 
 ## 快速開始
 
+### Linux / macOS / WSL / Git Bash
+
 ```bash
 cd trellis-window
 ./start.sh
 # 本機：  http://127.0.0.1:8775
 # 區網：  http://192.168.68.69:8775   （依主機實際 IP）
+```
+
+### Windows（PowerShell）
+
+`start.sh` 是 bash 腳本，**在 PowerShell 裡無效**（常會立刻結束、沒有任何輸出）。請改用：
+
+```powershell
+cd trellis-window
+.\start.ps1
+# 本機：  http://127.0.0.1:8775
+```
+
+若出現「無法載入，因為這個系統上已停用指令碼執行」，先執行一次：
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+或不用腳本、手動啟動：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python -m uvicorn server.app:app --host 0.0.0.0 --port 8775
 ```
 
 1. 點 **選擇資料夾…** 在伺服器檔案系統中瀏覽  
@@ -18,13 +45,19 @@ cd trellis-window
 預設綁定 `0.0.0.0:8775`，區網其他裝置可連線。可用環境變數覆寫：
 
 ```bash
+# Linux / macOS
 TRELLIS_WINDOW_HOST=0.0.0.0 TRELLIS_WINDOW_PORT=8775 ./start.sh
 # 若只要本機： TRELLIS_WINDOW_HOST=127.0.0.1 ./start.sh
 ```
 
+```powershell
+# Windows PowerShell
+$env:TRELLIS_WINDOW_HOST="127.0.0.1"; $env:TRELLIS_WINDOW_PORT="8775"; .\start.ps1
+```
+
 若系統無 `python3-venv`，可用 [uv](https://github.com/astral-sh/uv)：`uv venv .venv && uv pip install -r requirements.txt --python .venv/bin/python`（`start.sh` 會自動嘗試）。
 
-手動：
+手動（Unix）：
 
 ```bash
 python3 -m venv .venv
