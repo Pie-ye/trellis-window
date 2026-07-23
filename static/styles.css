@@ -74,6 +74,19 @@ aside,
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+#detail {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+#detail[hidden] {
+  display: none;
 }
 
 .panel-head {
@@ -264,6 +277,7 @@ button.danger {
 
 .content {
   flex: 1;
+  min-height: 0;
   overflow: auto;
   padding: 16px 20px 40px;
 }
