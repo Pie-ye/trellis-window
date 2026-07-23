@@ -23,22 +23,30 @@ cd trellis-window
 # 本機：  http://127.0.0.1:8775
 ```
 
-`start.ps1` 會在 **缺少 uvicorn 時自動 `pip install -r requirements.txt`**（即使 `.venv` 已存在）。
+`start.ps1` 會：
 
-若仍報 `No module named uvicorn`，刪除壞掉的 venv 後重跑：
+1. 建立 `.venv`（若尚無）
+2. **安全偵測** uvicorn／fastapi（import 失敗不會因 NativeCommandError 中止）
+3. 缺依賴時自動 `pip install -r requirements.txt`
+4. 啟動伺服器
 
-```powershell
-Remove-Item -Recurse -Force .venv
-.\start.ps1
-```
-
-若出現「無法載入，因為這個系統上已停用指令碼執行」，先執行一次：
+常用參數：
 
 ```powershell
-Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+.\start.ps1 -ForceReinstall          # 刪除 .venv 後重建並重裝依賴
+.\start.ps1 -HostAddr 127.0.0.1 -Port 8775
 ```
 
-或不用腳本、手動啟動：
+#### 排查
+
+| 現象 | 處理 |
+|------|------|
+| `NativeCommandError` / Traceback 在 `import uvicorn` | 請 `git pull` 更新 `start.ps1`（舊版在 `$ErrorActionPreference=Stop` 下會被 import 失敗中止） |
+| `No module named uvicorn` | `.\start.ps1 -ForceReinstall` 或下方手動 pip |
+| 腳本無法執行（ExecutionPolicy） | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
+| 半殘 `.venv` | `Remove-Item -Recurse -Force .venv` 後再 `.\start.ps1` |
+
+手動啟動：
 
 ```powershell
 python -m venv .venv
